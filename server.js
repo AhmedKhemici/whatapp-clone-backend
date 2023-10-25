@@ -9,11 +9,10 @@ const port = process.env.PORT || 9000
 //  middleware
 
 //  DB config
-const connection_url = 'mongodb://root:example@127.0.0.1:27017/whatsapp'
+const connection_url = 'mongodb://root:example@127.0.0.1:27017/'
 
 
 mongoose.connect(connection_url,{
-    useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
