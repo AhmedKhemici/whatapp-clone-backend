@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import route from "./Routes/messages.js";
-import Server  from "./socket.js";
+import routeMessages from "./Routes/messages.js";
+import routeUsers from "./Routes/users.js";
+import Socket  from "./socket.js";
 import cors from 'cors';
 
 const app = express();
@@ -9,7 +10,8 @@ const port = process.env.PORT || 9000
 
 app.use(express.json());
 app.use(cors());
-app.use('/api/v1', route);
+app.use('/api/v1', routeMessages);
+app.use('/api/v1', routeUsers);
 
 const connection_url = 'mongodb://localhost:27017/whatsapp'
 
@@ -20,7 +22,7 @@ mongoose.connect(connection_url,{
     useUnifiedTopology: true
 }).then(result => {
     const server = app.listen(port,()=>console.log(`Listening on localhost:${port}`));
-    const io = Server.init(server);
+    const io = Socket.init(server);
     io.on('connection', socket => {
         console.log('Client connected');
     });

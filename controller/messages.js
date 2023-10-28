@@ -1,4 +1,5 @@
 import Messages from "../module/messages.js";
+import Socket from "../socket.js";
 
 const syncMessages = (req, res) => {
     Messages.find({}).then(result => {
