@@ -15,9 +15,9 @@ const signup = (req, res) => {
 const login = (req, res) => {
     const data = req.body;
     console.log(data);
-    Users.find({ name: data.name, password: data.password })
+    Users.findOne({ name: data.name, password: data.password })
     .then(result => {
-        if (result == []){ 
+        if (!result){ 
             console.log('here');
             throw new Error('Credentials Invalid');
         } 
