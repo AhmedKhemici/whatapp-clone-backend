@@ -1,0 +1,26 @@
+{
+  "silence": false,
+  "terminals": [
+    {
+      "name": "backend",
+      "icon": "server", 
+      "color": "terminal.ansiGreen",
+      "focus": true, 
+      "path": "/"
+    },
+    {
+      "name": "git",
+      "icon": "git-branch", 
+      "color": "terminal.ansiRed",
+      "focus": false, 
+      "path": "/"
+    },
+    {
+      "name": "db",
+      "icon": "database", 
+      "color": "terminal.ansiYellow",
+      "focus": false, 
+      "path": "../db/"
+    }
+  ]
+}

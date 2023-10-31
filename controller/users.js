@@ -14,8 +14,14 @@ const signup = (req, res) => {
 
 const login = (req, res) => {
     const data = req.body;
+    console.log(data);
     Users.find({ name: data.name, password: data.password })
     .then(result => {
+        if (result == []){ 
+            console.log('here');
+            throw new Error('Credentials Invalid');
+        } 
+        console.log(result);
         res.status(200).send({message: 'login',user: result});
     })
     .catch(err => {
