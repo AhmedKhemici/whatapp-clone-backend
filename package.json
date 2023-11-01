@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "devStart": "nodemon server.js",
+    "dev-start": "nodemon server.js",
     "start": "node server.js"
   },
   "author": "Ahmed Khemici",

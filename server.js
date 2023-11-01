@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import routeMessages from "./Routes/messages.js";
 import routeUsers from "./Routes/users.js";
+import errorHandler from "./middleware/errorHandler.js";
 import Socket  from "./socket.js";
 import cors from 'cors';
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api/v1', routeMessages);
 app.use('/api/v1', routeUsers);
+app.use(errorHandler);
 
 const connection_url = 'mongodb://localhost:27017/whatsapp'
 

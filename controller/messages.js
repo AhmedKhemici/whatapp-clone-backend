@@ -1,13 +1,14 @@
 import Messages from "../module/messages.js";
 import Socket from "../socket.js";
 
-const syncMessages = (req, res) => {
+const syncMessages = (req, res, next) => {
+    console.log("syncMessages");
     Messages.find({}).then(result => {
         console.log('return all messages');
         res.status(201).send(result);
     }).catch(err => {
         console.log(err);
-        res.status(500).send(err)
+        next(err);
     });
 }
 
@@ -19,7 +20,7 @@ const sendMessage = (req, res) => {
         res.status(201).send(`new message create: \n ${result}`)
     }).catch(err => {
         console.log(err);
-        res.status(500).send(err)
+        next(err);
     });
 }
 

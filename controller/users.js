@@ -8,7 +8,8 @@ const signup = (req, res) => {
         res.status(200).send({message: 'User Signed Up',user: result});
     })
     .catch(err => {
-        res.status(500).send({message: 'Error Occurred',Error: err})
+        err.code = 'ERR_AUTHENTICATION'
+        next(err);
     })
 }
 
@@ -17,15 +18,12 @@ const login = (req, res) => {
     console.log(data);
     Users.findOne({ name: data.name, password: data.password })
     .then(result => {
-        if (!result){ 
-            console.log('here');
-            throw new Error('Credentials Invalid');
-        } 
         console.log(result);
         res.status(200).send({message: 'login',user: result});
     })
     .catch(err => {
-        res.status(500).send({message: 'Credentials Invalid',Error: err})
+        err.data = {code:'AUTHENTICATION'}
+        next(err);
     })
 }
 
