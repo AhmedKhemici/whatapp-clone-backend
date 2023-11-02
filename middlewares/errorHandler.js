@@ -7,6 +7,7 @@ const Errors = {
 
 const errorHandler = (err, req, res, next) => {
     let response = Errors['ERR_DEFAULT'];
+    console.log(err);
     if (err.code){
         response = Errors[err.code];
     }

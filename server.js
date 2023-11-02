@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import routeMessages from "./Routes/messages.js";
-import routeUsers from "./Routes/users.js";
-import errorHandler from "./middleware/errorHandler.js";
+import routeMessages from "./routes/messages.js";
+import routeUsers from "./routes/users.js";
+import errorHandler from "./middlewares/errorHandler.js";
 import Socket  from "./socket.js";
 import cors from 'cors';
 
@@ -26,6 +26,7 @@ mongoose.connect(connection_url,{
     const server = app.listen(port,()=>console.log(`Listening on localhost:${port}`));
     const io = Socket.init(server);
     io.on('connection', socket => {
+        console.log(socket.handshake.query);
         console.log('Client connected');
     });
 })
