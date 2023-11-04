@@ -19,14 +19,10 @@ const signup = (req, res) => {
             password: data.password, 
             timestamp: timestamp
         });
-        authentications.save()
-        .then(result => {
-            res.status(200).send({message: 'User Signed Up',user: result});
-        })
-        .catch(err => {
-            err.code = 'ERR_AUTHENTICATION'
-            next(err);
-        });
+        return authentications.save()
+    })
+    .then(result => {
+        res.status(200).send({message: 'User Signed Up',user: result});
     })
     .catch(err => {
         err.code = 'ERR_AUTHENTICATION'

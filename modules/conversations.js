@@ -4,7 +4,6 @@ import {users} from "./users.js";
 const conversations = mongoose.Schema({
     conversation_id: String,
     user: users,
-    message: String,
     timestamp: String
 });
 
