@@ -4,7 +4,7 @@ import { getConversationMessages, sendMessage } from "../controllers/messages.js
 
 const router = express.Router();
 
-router.get('/conversations/:conversation_id/messages/sync', authentication, getConversationMessages);
-router.post('/messages/new', authentication, sendMessage);
+router.get('/conversations/:conversation_id/sync-messages', authentication, getConversationMessages);
+router.post('/conversations/:conversation_id/send-message', authentication, sendMessage);
 
 export default router;

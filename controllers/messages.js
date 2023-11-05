@@ -5,7 +5,7 @@ import Socket from "../socket.js";
 
 const getConversationMessages = (req, res, next) => {
     const conversation_id = req.params.conversation_id
-    Messages.find({'conversations.conversation_id': conversation_id}).then(result => {
+    Messages.find({'conversation.conversation_id': conversation_id}).then(result => {
         console.log('return all messages');
         res.status(200).send(result);
     }).catch(err => {
@@ -15,25 +15,27 @@ const getConversationMessages = (req, res, next) => {
 }
 
 const sendMessage = (req, res, next) => {
-    const conversation_id = req.body.conversation_id
-    const from = Users.findOne({_id: req.userId})
-    .catch(err => {
-        console.log(err);
-        next(err);
-    });
-    const to = Users.findOne({_id: req.body.from})
-    .catch(err => {
-        console.log(err);
-        next(err);
-    });
-    const message = req.body.message;
-    const timestamp = Date.now();
-    Conversations.findOne({ 'user._id': req.userId,'conversation_id': conversation_id})
-    .then((result) => {
+    const conversation_id = req.params.conversation_id
+    const data = {}
+    Users.findOne({_id: req.userId})
+    .then( from_user => {
+        data.from_user = from_user;
+        const to_user = Users.findOne({_id: req.body.to});
+        return to_user;
+    })
+    .then( (to_user) => {
+        data.to_user = to_user;
+        const conversation = Conversations.findOne({ 'user._id': req.userId,'conversation_id': conversation_id});
+        return conversation;
+    })
+    .then( (conversation) => {
+        data.conversation = conversation;
+        const message = req.body.message;
+        const timestamp = Date.now();
         const Message = new Messages({
-            conversation_id: result,
-            from: from,
-            to: to,
+            conversation: data.conversation,
+            from: data.from_user,
+            to: data.to_user,
             message: message,
             timestamp: timestamp
         });
@@ -41,8 +43,9 @@ const sendMessage = (req, res, next) => {
     })
     .then(result => {
         console.log('Created Message');
-        res.status(200).send(`new message create: \n ${result}`)
-    }).catch(err => {
+        res.status(200).send({ "message":"Message Sent Successfully" , "result":result});
+    })
+    .catch(err => {
         console.log(err);
         next(err);
     });

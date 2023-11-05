@@ -2,7 +2,6 @@ import Users from '../modules/users.js';
 import Authentications from '../modules/authentications.js';
 
 const signup = (req, res) => {
-    console.log('Here');
     const data = req.body;
     const timestamp = Date.now();
     const user = new Users({
@@ -11,7 +10,6 @@ const signup = (req, res) => {
         phoneNumber: data.phoneNumber,
         timestamp: timestamp
     });
-    console.log('Here');
     user.save()
     .then(result => {
         const authentications = new Authentications({
@@ -32,10 +30,8 @@ const signup = (req, res) => {
 
 const login = (req, res) => {
     const data = req.body;
-    console.log(data);
-    Authentications.findOne({ "users.firstName": data.firstName ,"password": data.password})
+    Authentications.findOne({ "user.firstName": data.firstName ,"password": data.password})
     .then(result => {
-        console.log(result);
         res.status(200).send({message: 'login',result});
     })
     .catch(err => {

@@ -1,34 +1,62 @@
 import Conversations from "../modules/conversations.js";
+import Messages from "../modules/messages.js";
 import Users from "../modules/users.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const getRecentConversations = (req, res, next) => {
+    //TODO: Still hard
     const userId = req.userId;
-    Conversations.find({'user._id':userId}).sort('timestamp');
-    //This Needs a Complex Query Not Hard , but needs some thinking 
+    Conversations.find({'user._id':userId}).sort('timestamp')
+    .then( (userConversations) =>{
+        let recentConversations;
+        if (userConversations == []){
+            recentConversations = [];
+        }
+        else{
+            recentConversations = userConversations.map( (userConversation) =>{
+                // const latestMessage = Messages.findOne({'conversation.conversation_id': userConversation.conversation_id})
+                // .then(( result) =>{
+                //     console.log(result);
+                //     return result;
+                // });
+                // console.log(latestMessage);
+                userConversation.latestMessage = "hello";
+                return userConversation;
+            });
+        }
+        res.status(200).send({'message': 'Recent Conversations', conversations: recentConversations});   
+    });
 }
 
 const createConversation = (req, res, next) => {
-    try{
-        const conversation_id = uuidv4();
-        const timestamp = Date.now();
-        const from_user = Users.findOne({_id : req.userId})    
-        const to_user = Users.findOne({_id : req.body.to})  
+    const conversation_id = uuidv4();
+    const timestamp = Date.now();
+    const from_user = Users.findById(req.userId)
+    .then( (result)=>{
         const from_conversation = new Conversations({
             conversation_id: conversation_id, 
-            user: from_user,
+            user: result,
             timestamp: timestamp
         });
+        return from_conversation.save();
+    })
+    .then( () =>{
+        return Users.findById(req.body.to)
+    })
+    .then( (result) =>{
         const to_conversation = new Conversations({
             conversation_id: conversation_id, 
-            user: to_user,
+            user: result,
             timestamp: timestamp
         });
-        res.status(200).send({'message': 'Conversations was Created Successfully', conversations: [from_conversation, to_conversation]});    
-    }catch(err){
+        to_conversation.save();
+        res.status(200).send({'message': 'Conversations was Created Successfully', conversations_id: conversation_id}); 
+    })  
+    .catch((err) => {
         console.log(err);
         next(err);
-    }
+    })
 }
+
 
 export { getRecentConversations, createConversation };

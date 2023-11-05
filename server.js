@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import routeConversations from "./routes/conversations.js";
 import routeMessages from "./routes/messages.js";
 import routeUsers from "./routes/users.js";
 import errorHandler from "./middlewares/errorHandler.js";
@@ -7,12 +8,14 @@ import Socket  from "./socket.js";
 import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 9000
+const port = process.env.PORT || 9000;
+const prefix_v1 = '/api/v1';
 
 app.use(express.json());
 app.use(cors());
-app.use('/api/v1', routeMessages);
-app.use('/api/v1', routeUsers);
+app.use( prefix_v1, routeConversations);
+app.use( prefix_v1, routeMessages);
+app.use( prefix_v1, routeUsers);
 app.use(errorHandler);
 
 const connection_url = 'mongodb://localhost:27017/whatsapp'
