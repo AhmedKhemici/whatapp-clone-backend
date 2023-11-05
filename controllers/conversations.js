@@ -8,30 +8,17 @@ const getRecentConversations = (req, res, next) => {
     const userId = req.userId;
     Conversations.find({'user._id':userId}).sort('timestamp')
     .then( (userConversations) =>{
-        let recentConversations;
-        if (userConversations == []){
-            recentConversations = [];
-        }
-        else{
-            recentConversations = userConversations.map( (userConversation) =>{
-                // const latestMessage = Messages.findOne({'conversation.conversation_id': userConversation.conversation_id})
-                // .then(( result) =>{
-                //     console.log(result);
-                //     return result;
-                // });
-                // console.log(latestMessage);
-                userConversation.latestMessage = "hello";
-                return userConversation;
-            });
-        }
-        res.status(200).send({'message': 'Recent Conversations', conversations: recentConversations});   
+        res.status(200).send({'message': 'Recent Conversations', conversations: userConversations});   
+    }).catch( (err) =>{
+        console.log(err);
+        next(err);
     });
 }
 
 const createConversation = (req, res, next) => {
     const conversation_id = uuidv4();
     const timestamp = Date.now();
-    const from_user = Users.findById(req.userId)
+    Users.findById(req.userId)
     .then( (result)=>{
         const from_conversation = new Conversations({
             conversation_id: conversation_id, 

@@ -5,6 +5,7 @@ import Socket from "../socket.js";
 
 const getConversationMessages = (req, res, next) => {
     const conversation_id = req.params.conversation_id
+    console.log(conversation_id);
     Messages.find({'conversation.conversation_id': conversation_id}).then(result => {
         console.log('return all messages');
         res.status(200).send(result);
