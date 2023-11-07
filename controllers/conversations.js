@@ -2,7 +2,6 @@ import Conversations from "../modules/conversations.js";
 import Messages from "../modules/messages.js";
 import Users from "../modules/users.js";
 import { v4 as uuidv4 } from 'uuid';
-import dateFormatter from '../utils/dateFormatter.js'
 
 const  getRecentConversations = async (req, res, next) => {
     const userId = req.userId;
