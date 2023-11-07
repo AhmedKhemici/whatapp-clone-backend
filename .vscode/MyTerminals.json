@@ -13,7 +13,8 @@
       "icon": "git-branch", 
       "color": "terminal.ansiRed",
       "focus": false, 
-      "path": "/"
+      "path": "/",
+      "shellPath": "C:\\Program Files\\Git\\bin\\bash.exe"
     },
     {
       "name": "db",
