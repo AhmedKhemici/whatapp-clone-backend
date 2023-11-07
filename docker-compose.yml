@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes: 
+      - mongo_data:/data/db
+      - mongo_data_config:/data/configdb
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+
+volumes:
+  mongo_data:
+    external:
+      name:  mongo_data_volume
+  mongo_data_config:
+    external:
+      name:  mongo_data_config_volume

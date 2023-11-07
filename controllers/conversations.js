@@ -2,17 +2,17 @@ import Conversations from "../modules/conversations.js";
 import Messages from "../modules/messages.js";
 import Users from "../modules/users.js";
 import { v4 as uuidv4 } from 'uuid';
+import dateFormatter from '../utils/dateFormatter.js'
 
-const getRecentConversations = (req, res, next) => {
-    //TODO: Still hard
+const  getRecentConversations = async (req, res, next) => {
     const userId = req.userId;
-    Conversations.find({'user._id':userId}).sort('timestamp')
-    .then( (userConversations) =>{
-        res.status(200).send({'message': 'Recent Conversations', conversations: userConversations});   
-    }).catch( (err) =>{
-        console.log(err);
-        next(err);
-    });
+    let conversations = await Conversations.find({'user._id':userId}).lean().sort('timestamp').exec();
+    conversations = await Promise.all(conversations.map( async (conversation) =>{
+        const message = await Messages.findOne({'conversation.conversation_id':conversation.conversation_id}).lean().sort('timestamp').exec();
+        conversation.message = message;
+        return conversation;
+    }));
+    res.status(200).send({'message': 'Recent Conversations', conversations: conversations});   
 }
 
 const createConversation = (req, res, next) => {
