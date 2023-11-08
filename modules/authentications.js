@@ -1,11 +1,8 @@
-import mongoose from "mongoose";
-import { users } from "./users.js";
+import mongoose, {Schema} from "mongoose";
 
 const authentications = mongoose.Schema({
-    user: users,
+    user_id: { type: Schema.Types.ObjectId, ref: 'users' },
     password: String, 
-    timestamp: String
-});
+},{ timestamps: true });
 
 export default mongoose.model('authentications', authentications);
-export {authentications};

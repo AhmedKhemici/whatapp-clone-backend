@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
         next(err);
     }
     Authentications.findById(auth).then((result) => {
-        req.userId = result.user._id;
+        req.userId = result.user_id;
         next();
     }).catch(err => {
         err.code = 'ERR_AUTHENTICATION'

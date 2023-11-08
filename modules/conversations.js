@@ -1,11 +1,8 @@
-import mongoose from "mongoose";
-import {users} from "./users.js";
+import mongoose, {Schema} from "mongoose";
 
 const conversations = mongoose.Schema({
     conversation_id: String,
-    user: users,
-    timestamp: String
-});
+    user_id: { type: Schema.Types.ObjectId, ref: 'users' }
+},{ timestamps: true });
 
 export default mongoose.model('conversations', conversations); 
-export {conversations};

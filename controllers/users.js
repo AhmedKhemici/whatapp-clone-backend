@@ -3,19 +3,16 @@ import Authentications from '../modules/authentications.js';
 
 const signup = (req, res) => {
     const data = req.body;
-    const timestamp = Date.now();
     const user = new Users({
         firstName: data.firstName,
         lastName: data.lastName,
-        phoneNumber: data.phoneNumber,
-        timestamp: timestamp
+        phoneNumber: data.phoneNumber
     });
     user.save()
     .then(result => {
         const authentications = new Authentications({
-            user: result,
-            password: data.password, 
-            timestamp: timestamp
+            user_id: result,
+            password: data.password
         });
         return authentications.save()
     })
@@ -28,11 +25,17 @@ const signup = (req, res) => {
     });
 }
 
-const login = (req, res) => {
+const login = (req, res, next) => {
     const data = req.body;
-    Authentications.findOne({ "user.firstName": data.firstName ,"password": data.password})
-    .then(result => {
-        res.status(200).send({message: 'login',result});
+    Users.findOne({ firstName: data.firstName})
+    .then( (user)=>{
+        console.log(user);
+        const auth = Authentications.findOne({ user_id: user._id, password: data.password}).populate('user_id');
+        return auth;
+    })
+    .then( (auth) => {
+        console.log(auth);
+        res.status(200).send({message: 'login', result: auth});
     })
     .catch(err => {
         err.data = {code:'AUTHENTICATION'}
