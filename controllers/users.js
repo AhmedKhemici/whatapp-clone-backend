@@ -29,12 +29,10 @@ const login = (req, res, next) => {
     const data = req.body;
     Users.findOne({ firstName: data.firstName})
     .then( (user)=>{
-        console.log(user);
         const auth = Authentications.findOne({ user_id: user._id, password: data.password}).populate('user_id');
         return auth;
     })
     .then( (auth) => {
-        console.log(auth);
         res.status(200).send({message: 'login', result: auth});
     })
     .catch(err => {
