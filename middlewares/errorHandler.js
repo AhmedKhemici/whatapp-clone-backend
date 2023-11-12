@@ -1,4 +1,3 @@
-//TODO: can be upgraded
 const Errors = {
     'ERR_DEFAULT':{'message': 'internal server error','status': 500},
     'ERR_USER_NOT_FOUND':{'message': 'user was not found','status': 500},
