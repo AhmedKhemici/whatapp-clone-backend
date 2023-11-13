@@ -4,8 +4,10 @@ import routeConversations from "./routes/conversations.js";
 import routeMessages from "./routes/messages.js";
 import routeUsers from "./routes/users.js";
 import errorHandler from "./middlewares/errorHandler.js";
-import Socket  from "./socket.js";
 import cors from 'cors';
+import { socketConnect } from "./services/socketService.js";
+import { socketAuth } from "./middlewares/authentication.js";
+import { Server } from "socket.io";
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -27,10 +29,10 @@ mongoose.connect(connection_url,{
     useUnifiedTopology: true
 }).then(result => {
     const server = app.listen(port,()=>console.log(`Listening on localhost:${port}`));
-    const io = Socket.init(server);
-    io.on('connection', socket => {
-        console.log(socket.handshake.query);
-        console.log('Client connected');
-    });
+    const io = new Server(server, {cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }});
+    socketConnect(io, socketAuth);
 })
 .catch(err => console.log(err));
