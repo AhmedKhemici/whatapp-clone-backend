@@ -26,9 +26,18 @@ const sendMessage = (req, res, next) => {
         return Message.save();
     })
     .then(result => {
-        console.log(to);
-        //TODO: need to continue from here
-        getIO().to(to).emit('message_received', {message:req.body.message});
+        const socketData = {
+            _id: conversation_id,
+            from:{
+                _id: result.from._id,
+                firstName: result.from.firstName,
+                lastName: result.from.lastName,
+                phoneNumber: result.from.phoneNumber
+            },
+            message: result.message,
+            createdAt: result.createdAt
+        }
+        getIO().to(to.toString()).emit('message_received', socketData);
         res.status(200).send({ "message":"Message Sent Successfully" , "result":result});
     })
     .catch(err => {
