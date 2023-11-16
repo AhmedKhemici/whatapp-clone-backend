@@ -25,6 +25,7 @@ const sendMessage = (req, res, next) => {
         });
         return Message.save();
     })
+    .then(result => result.populate('from'))
     .then(result => {
         const socketData = {
             _id: conversation_id,
